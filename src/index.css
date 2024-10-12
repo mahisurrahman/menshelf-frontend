@@ -1,0 +1,9 @@
+/* @import url(https://fonts.bunny.net/css?family=grandstander:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i);
+@import url(https://fonts.bunny.net/css?family=poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i);
+@import url(https://fonts.bunny.net/css?family=arbutus:400);
+@import url(https://fonts.bunny.net/css?family=aclonica:400); */
+@import url(https://fonts.bunny.net/css?family=lato:100,100i,300,300i,400,400i,700,700i,900,900i);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

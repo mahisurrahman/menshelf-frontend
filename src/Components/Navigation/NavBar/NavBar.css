@@ -1,0 +1,19 @@
+/* NavBar.css */
+.guest-dropdown-wrapper {
+    position: relative;
+  }
+  
+  .user-dropdown-wrapper {
+    position: relative;
+  }
+  
+  .guest-dropdown {
+    right: 10px;
+  }
+  
+  .user-dropdown {
+    right: 10px; /* Adjust this value if needed */
+  }
+  
+  /* Additional styles if needed */
+  
