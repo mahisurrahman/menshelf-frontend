@@ -19,6 +19,7 @@ const OrderItem = ({
   const [tax, setTax] = useState(0);
   const [calculatedTax, setCalculatedTax] = useState(0.0);
   const navigate = useNavigate();
+  const [isBkashSelected, setIsBkashSelected] = useState(false);
 
   const getStockRemaining = async () => {
     try {
@@ -33,10 +34,9 @@ const OrderItem = ({
     }
   };
 
-
-  const getTax = async()=>{
-    try{
-      const response = await getRequest('/tax/src');
+  const getTax = async () => {
+    try {
+      const response = await getRequest("/tax/src");
       setTax(response?.data?.data[0].taxNumber);
 
       // let responseTwo = (response?.data?.data[0]);
@@ -45,19 +45,14 @@ const OrderItem = ({
       // }else{
       //   setTax(0);
       // }
-
-    }catch(error){
-      console.log(error); 
+    } catch (error) {
+      console.log(error);
     }
-
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     getTax();
-  },[])
-
-
-
+  }, []);
 
   const handlePlaceOrder = async (item) => {
     try {
@@ -83,12 +78,15 @@ const OrderItem = ({
         productName: item.productName,
         productThumb: item.productImage,
         productSellingPrice: item.totalPrice,
-        allTotalPrice: item.totalPrice + ((tax/100)*item?.totalPrice) + selected?.deliveryFee,
+        allTotalPrice:
+          item.totalPrice +
+          (tax / 100) * item?.totalPrice +
+          selected?.deliveryFee,
         totalQuantity: item.quantity,
         deliveryFee: selected?.deliveryFee,
         deliveryShift: selected?.deliveryShift,
         discount: item.discount,
-        orderType: 1
+        orderType: 1,
       };
 
       const createOrder = await postRequest("/orders/crt", orderDetails);
@@ -112,8 +110,7 @@ const OrderItem = ({
     }
   };
 
-
-  const handleBkashPayment = (item) => {
+  const handleBkashPayment = (item, selected) => {
     const orderDetails = {
       cartId: item._id,
       userId: user._id,
@@ -129,17 +126,27 @@ const OrderItem = ({
       productName: item.productName,
       productThumb: item.productImage,
       productSellingPrice: item.totalPrice,
-      allTotalPrice: item.totalPrice + ((tax/100)*item?.totalPrice),
+      allTotalPrice: item.totalPrice + (tax / 100) * item?.totalPrice,
       totalQuantity: item.quantity,
+      deliveryFee: selected?.deliveryFee,
+      deliveryShift: selected?.deliveryShift,
       discount: item.discount,
       orderType: 2,
     };
 
+    // console.log("Order Details", orderDetails);
     navigate("/user/dash/payment", { state: orderDetails });
   };
 
   const handleCODClick = () => {
-    setIsCODSelected(!isCODSelected);
+    setIsCODSelected(true);
+    setIsBkashSelected(false); // Deselect Bkash when COD is selected
+  };
+
+  const handleBkashClick = (item, selected) => {
+    setIsBkashSelected(true);
+    setIsCODSelected(false); // Deselect COD when Bkash is selected
+    handleBkashPayment(item, selected);
   };
 
   useEffect(() => {
@@ -168,7 +175,7 @@ const OrderItem = ({
           <p>
             ৳{" "}
             {tax > 0
-              ? (item?.totalPrice + ((tax/100)*item?.totalPrice)).toFixed(2)
+              ? (item?.totalPrice + (tax / 100) * item?.totalPrice).toFixed(2)
               : item?.totalPrice}
           </p>
         </div>
@@ -193,7 +200,7 @@ const OrderItem = ({
               {tax > 0
                 ? (
                     item.totalPrice +
-                    ((tax/100)*item?.totalPrice) +
+                    (tax / 100) * item?.totalPrice +
                     selected?.deliveryFee
                   ).toFixed(2)
                 : (item.totalPrice + selected?.deliveryFee).toFixed(2)}
@@ -202,7 +209,7 @@ const OrderItem = ({
             <p>
               ৳{" "}
               {tax > 0
-                ? (item.totalPrice + ((tax/100)*item?.totalPrice)).toFixed(2)
+                ? (item.totalPrice + (tax / 100) * item?.totalPrice).toFixed(2)
                 : item.totalPrice.toFixed(2)}
             </p>
           )}
@@ -227,19 +234,32 @@ const OrderItem = ({
               isCODSelected
                 ? "border-fourth text-fourth"
                 : "border-ninth text-ninth"
-            } ${!selected ? "opacity-50 cursor-not-allowed" : ""}`} // Disable styling if selected is missing
+            } ${!selected ? "opacity-50 cursor-not-allowed" : ""}`}
             onClick={handleCODClick}
-            disabled={!selected} // Disable interaction if selected is missing
+            disabled={!selected}
           >
             Cash On <br /> Delivery
           </button>
+
           <button
+            className={`mt-5 text-xs px-2 py-2 border-4 rounded-md font-semibold ${
+              isBkashSelected
+                ? "border-pink-500 text-pink-600"
+                : "border-ninth text-ninth"
+            } ${!selected ? "opacity-50 cursor-not-allowed" : ""}`}
+            onClick={()=>handleBkashClick(item, selected)}
+            disabled={!selected}
+          >
+            Pay On <br /> Bkash
+          </button>
+
+          {/* <button
             onClick={() => handleBkashPayment(item)}
             className="mt-5 text-xs px-4 py-2 border-4 rounded-md font-semibold border-pink-300 text-pink-300"
           >
             Pay on
             <br /> Bkash
-          </button>
+          </button> */}
         </div>
         <p className="mt-10 text-xs text-center">
           Please Pay After Getting Your Goods

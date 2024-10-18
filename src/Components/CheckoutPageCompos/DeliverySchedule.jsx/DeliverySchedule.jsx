@@ -1,4 +1,5 @@
 const DeliverySchedule = ({allCharges, selected, handleClick}) => {
+  console.log("Selected", selected);
   return (
     <div className="my-5 rounded-lg shadow-xl px-10 py-10 bg-white">
       <div className="flex justify-between mb-4">
@@ -16,7 +17,7 @@ const DeliverySchedule = ({allCharges, selected, handleClick}) => {
           <div
             key={option?._id}
             className={`w-44 border rounded-lg py-4 px-4 bg-fifth hover:cursor-pointer hover:border-seventh hover:duration-300 ${
-              selected === index ? "border-seventh" : "border-fifth"
+              selected?._id ===  option?._id ? "border-seventh" : "border-fifth"
             }`}
             onClick={() => handleClick(option)}
           >
