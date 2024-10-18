@@ -110,27 +110,58 @@ const SingleProductItem = ({
         </td>
       </tr>
       {showModal && (
-        <div className="fixed inset-0 z-10 mb-10">
-          <div className="fixed inset-0 bg-black opacity-50"></div>
+        <div className="fixed inset-0 z-50">
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={closeModal}
+          ></div>
+
+          {/* Modal container */}
           <div className="flex items-center justify-center min-h-screen">
-            <div className="bg-white rounded-lg p-4 max-w-6xl mx-auto z-20 relative overflow-auto">
+            <div className="bg-white rounded-lg shadow-lg p-6 md:max-w-3xl mx-auto z-20 relative overflow-auto max-h-[90vh]">
+              {/* Close button */}
               <button
                 onClick={closeModal}
-                className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-black text-6xl"
+                className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 hover:text-gray-700 text-4xl font-bold transition duration-300"
               >
                 &times;
               </button>
-              <h2 className="text-xl font-bold mb-4">{product.productName}</h2>
-              <img
-                src={`http://localhost:8000/images/${product.productThumb}`}
-                alt=""
-                className="mb-4 max-w-full h-auto"
-              />
-              <p>Buying Price: $ {product.buyingPrice}</p>
-              <p>Selling Price: $ {product.sellingPrice}</p>
-              <p>Discount: {product.discount} %</p>
-              <p>Status: {product.isActive ? "Active" : "Inactive"}</p>
-              <p>Deleted: {product.isDeleted ? "Yes" : "No"}</p>
+
+              {/* Modal content */}
+              <div className="mt-6">
+                <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+                  {product.productName}
+                </h2>
+
+                <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+                  <img
+                    src={`http://localhost:8000/images/${product.productThumb}`}
+                    alt={product.productName}
+                    className="w-40 h-40 md:w-48 md:h-48 object-cover rounded-lg shadow-md"
+                  />
+
+                  <div className="text-gray-700 space-y-2">
+                    <p>
+                      <strong>Buying Price:</strong> $ {product.buyingPrice}
+                    </p>
+                    <p>
+                      <strong>Selling Price:</strong> $ {product.sellingPrice}
+                    </p>
+                    <p>
+                      <strong>Discount:</strong> {product.discount} %
+                    </p>
+                    <p>
+                      <strong>Status:</strong>{" "}
+                      {product.isActive ? "Active" : "Inactive"}
+                    </p>
+                    <p>
+                      <strong>Deleted:</strong>{" "}
+                      {product.isDeleted ? "Yes" : "No"}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
